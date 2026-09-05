@@ -1,0 +1,33 @@
+{
+  "version": 1,
+  "hooks": {
+    "beforeSubmitPrompt": [
+      { "type": "command", "timeout": 5,
+        "command": "node \"$(ls -d ~/.cursor/plugins/cache/meghud-tokenmonk-throwaway/*/*/ 2>/dev/null | head -1)probe.js\" --strategy=project-hook --source=project" }
+    ],
+    "preToolUse": [
+      { "type": "command", "timeout": 5,
+        "command": "node \"$(ls -d ~/.cursor/plugins/cache/meghud-tokenmonk-throwaway/*/*/ 2>/dev/null | head -1)probe.js\" --strategy=project-hook --source=project" }
+    ],
+    "postToolUse": [
+      { "type": "command", "timeout": 5,
+        "command": "node \"$(ls -d ~/.cursor/plugins/cache/meghud-tokenmonk-throwaway/*/*/ 2>/dev/null | head -1)probe.js\" --strategy=project-hook --source=project" }
+    ],
+    "beforeShellExecution": [
+      { "type": "command", "timeout": 5,
+        "command": "node \"$(ls -d ~/.cursor/plugins/cache/meghud-tokenmonk-throwaway/*/*/ 2>/dev/null | head -1)probe.js\" --strategy=project-hook --source=project" }
+    ],
+    "afterFileEdit": [
+      { "type": "command", "timeout": 5,
+        "command": "node \"$(ls -d ~/.cursor/plugins/cache/meghud-tokenmonk-throwaway/*/*/ 2>/dev/null | head -1)probe.js\" --strategy=project-hook --source=project" }
+    ],
+    "afterAgentThought": [
+      { "type": "command", "timeout": 5,
+        "command": "node \"$(ls -d ~/.cursor/plugins/cache/meghud-tokenmonk-throwaway/*/*/ 2>/dev/null | head -1)probe.js\" --strategy=project-hook --source=project" }
+    ],
+    "stop": [
+      { "type": "command", "timeout": 5, "loop_limit": 1,
+        "command": "node \"$(ls -d ~/.cursor/plugins/cache/meghud-tokenmonk-throwaway/*/*/ 2>/dev/null | head -1)probe.js\" --strategy=project-hook --source=project" }
+    ]
+  }
+}
