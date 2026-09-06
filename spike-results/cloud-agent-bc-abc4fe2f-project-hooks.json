@@ -1,0 +1,33 @@
+{
+  "run": {
+    "bcId": "bc-abc4fe2f-330b-48ad-9026-68ea0dc6416b",
+    "url": "https://cursor.com/agents/bc-abc4fe2f-330b-48ad-9026-68ea0dc6416b",
+    "surface": "cloud_agent",
+    "repo": "https://github.com/meghana-tokenmonk/tokenmonk-test",
+    "testedAt": "2026-09-06T01:22:40Z"
+  },
+  "question": "Do project hooks from .cursor/hooks.json fire in this cloud-agent session?",
+  "answer": "no",
+  "evidence": {
+    "cursorInvokedProjectHookRecords": 0,
+    "cursorInvokedPluginHookRecords": 0,
+    "heartbeatLogPresent": false,
+    "manualProbeWorks": true,
+    "manualProbePath": "/workspace/.tm-spike/cursor-events.jsonl",
+    "manualProbeNote": "One beforeShellExecution record was written by the agent running probe.js itself with a fake session_id=manual-self-test. That is not a Cursor hook invocation."
+  },
+  "triggersAttempted": [
+    "beforeSubmitPrompt (this user message — should have fired before any tool if project hooks loaded)",
+    "preToolUse / postToolUse (Read, Write, Shell, MCP)",
+    "beforeShellExecution / afterShellExecution (multiple Shell tool calls)",
+    "afterFileEdit (Write of .tm-spike-trigger.txt and hooks.json)",
+    "beforeReadFile (Read of project-probe.sh)",
+    "afterAgentThought (would have fired during this turn if registered and loaded)"
+  ],
+  "confounders": [
+    "This VM booted from a stale snapshot at 51eec9c, whose .cursor/hooks.json was invalid JSON (broken afterAgentResponse object). Cursor likely failed to load project hooks at session start.",
+    "origin/main already had 7d3dd4b (valid JSON). Fast-forwarding the checkout and later rewriting hooks.json did not produce any hook records in this same session.",
+    "Plugin tokenmonk-probe-repo is installed (enabledCapabilities: static) and also produced zero ~/.tokenmonk-spike events."
+  ],
+  "conclusion": "In this session, Cursor did not invoke project hooks. The probe command and the new .cursor/hooks/project-probe.sh work when run by the agent. Re-test on a new cloud agent started from a revision with valid hooks.json (this branch) to see whether a clean load fires them."
+}
