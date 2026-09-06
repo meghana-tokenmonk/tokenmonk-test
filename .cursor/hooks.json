@@ -5,49 +5,49 @@
       {
         "type": "command",
         "timeout": 5,
-        "command": "node \"$(find $HOME/.cursor/plugins/cache/meghud-tokenmonk-throwaway -name probe.js -type f 2>/dev/null | head -1)\" --strategy=project-hook --source=project"
+        "command": "TM_SPIKE_DIR=\"$PWD/.tm-spike\" node \"$(find $HOME/.cursor/plugins/cache/meghud-tokenmonk-throwaway -name probe.js -type f 2>/dev/null | head -1)\" --strategy=project-hook --source=project"
       }
     ],
     "preToolUse": [
       {
         "type": "command",
         "timeout": 5,
-        "command": "node \"$(find $HOME/.cursor/plugins/cache/meghud-tokenmonk-throwaway -name probe.js -type f 2>/dev/null | head -1)\" --strategy=project-hook --source=project"
+        "command": "TM_SPIKE_DIR=\"$PWD/.tm-spike\" node \"$(find $HOME/.cursor/plugins/cache/meghud-tokenmonk-throwaway -name probe.js -type f 2>/dev/null | head -1)\" --strategy=project-hook --source=project"
       }
     ],
     "postToolUse": [
       {
         "type": "command",
         "timeout": 5,
-        "command": "node \"$(find $HOME/.cursor/plugins/cache/meghud-tokenmonk-throwaway -name probe.js -type f 2>/dev/null | head -1)\" --strategy=project-hook --source=project"
+        "command": "TM_SPIKE_DIR=\"$PWD/.tm-spike\" node \"$(find $HOME/.cursor/plugins/cache/meghud-tokenmonk-throwaway -name probe.js -type f 2>/dev/null | head -1)\" --strategy=project-hook --source=project"
       }
     ],
     "beforeShellExecution": [
       {
         "type": "command",
         "timeout": 5,
-        "command": "node \"$(find $HOME/.cursor/plugins/cache/meghud-tokenmonk-throwaway -name probe.js -type f 2>/dev/null | head -1)\" --strategy=project-hook --source=project"
+        "command": "TM_SPIKE_DIR=\"$PWD/.tm-spike\" node \"$(find $HOME/.cursor/plugins/cache/meghud-tokenmonk-throwaway -name probe.js -type f 2>/dev/null | head -1)\" --strategy=project-hook --source=project"
       }
     ],
     "afterFileEdit": [
       {
         "type": "command",
         "timeout": 5,
-        "command": "node \"$(find $HOME/.cursor/plugins/cache/meghud-tokenmonk-throwaway -name probe.js -type f 2>/dev/null | head -1)\" --strategy=project-hook --source=project"
+        "command": "TM_SPIKE_DIR=\"$PWD/.tm-spike\" node \"$(find $HOME/.cursor/plugins/cache/meghud-tokenmonk-throwaway -name probe.js -type f 2>/dev/null | head -1)\" --strategy=project-hook --source=project"
       }
     ],
     "afterAgentThought": [
       {
         "type": "command",
         "timeout": 5,
-        "command": "node \"$(find $HOME/.cursor/plugins/cache/meghud-tokenmonk-throwaway -name probe.js -type f 2>/dev/null | head -1)\" --strategy=project-hook --source=project"
+        "command": "TM_SPIKE_DIR=\"$PWD/.tm-spike\" node \"$(find $HOME/.cursor/plugins/cache/meghud-tokenmonk-throwaway -name probe.js -type f 2>/dev/null | head -1)\" --strategy=project-hook --source=project"
       }
     ],
     "stop": [
       {
         "type": "command",
         "timeout": 5,
-        "command": "node \"$(find $HOME/.cursor/plugins/cache/meghud-tokenmonk-throwaway -name probe.js -type f 2>/dev/null | head -1)\" --strategy=project-hook --source=project",
+        "command": "TM_SPIKE_DIR=\"$PWD/.tm-spike\" node \"$(find $HOME/.cursor/plugins/cache/meghud-tokenmonk-throwaway -name probe.js -type f 2>/dev/null | head -1)\" --strategy=project-hook --source=project",
         "loop_limit": 1
       }
     ]
