@@ -55,7 +55,7 @@
       {
         "type": "command",
         "timeout": 5,
-        "command": "TM_SPIKE_DIR=\"$PWD/.tm-spike\" node \"$(find $HOME/.cursor/plugins/cache/meghud-tokenmonk-throwaway -name probe.js -type f 2>/dev/null | head -1)\" --strategy=project-hook --source=project",
+        "command": "TM_SPIKE_DIR=\"$PWD/.tm-spike\" node \"$(find $HOME/.cursor/plugins/cache/meghud-tokenmonk-throwaway -name probe.js -type f 2>/dev/null | head -1)\" --strategy=project-hook --source=project"
       }
     ]
   }
