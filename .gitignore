@@ -1,0 +1,8 @@
+# TokenMonk probe / spike artifacts
+.tm-spike/
+.tokenmonk-spike/
+
+# OS and editor
+.DS_Store
+*.swp
+*~
