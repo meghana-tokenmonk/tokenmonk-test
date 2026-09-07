@@ -1,0 +1,97 @@
+{
+  "run": {
+    "bcId": "bc-a9bc921c-4014-40f2-b5d2-b82104cb107c",
+    "url": "https://cursor.com/agents/bc-a9bc921c-4014-40f2-b5d2-b82104cb107c",
+    "name": "Team plugin hooks cloud",
+    "surface": "cloud_agent",
+    "source": "desktop",
+    "repo": "https://github.com/meghana-tokenmonk/tokenmonk-test",
+    "gitSha": "65ad7bc39bfe8d35854a19db6ea480e47c38c698",
+    "testedAt": "2026-09-07T00:10:13Z"
+  },
+  "question": "Do team plugin hooks fire in this cloud-agent session?",
+  "answer": "no",
+  "control": {
+    "question": "Do project hooks from .cursor/hooks.json fire in this same session?",
+    "answer": "yes",
+    "note": "Opposite of the previous cloud-agent sample (bc-abc4fe2f), which had an invalid hooks.json in the boot snapshot. This checkout already had valid hooks.json, and project-probe.sh wrote a heartbeat log."
+  },
+  "plugin": {
+    "name": "tokenmonk-capture",
+    "displayName": "TokenMonk Capture",
+    "source": "team",
+    "marketplaceType": "TEAM",
+    "marketplaceSlug": "meghud-tokenmonk-cursor-plugin",
+    "pluginId": "61235598",
+    "isRequired": true,
+    "gitUrl": "https://github.com/meghud/tokenmonk-cursor-plugin",
+    "gitPath": "tokenmonk-capture",
+    "resolvedCommitSha": "b9f7197712481a40e0aff1240cc17aa4ec0b2bce",
+    "enabledCapabilities": ["static"],
+    "declaredCapabilityPaths": {
+      "command": [],
+      "skill": [],
+      "subagent": []
+    },
+    "installedAt": "2026-09-07T00:07:39Z",
+    "hooksRegistered": [
+      "beforeSubmitPrompt",
+      "sessionStart",
+      "stop",
+      "afterAgentResponse",
+      "afterAgentThought",
+      "postToolUse",
+      "postToolUseFailure",
+      "afterMCPExecution"
+    ]
+  },
+  "evidence": {
+    "cursorInvokedPluginHookRecords": 0,
+    "pluginHookLogPresentBeforeManualProbe": false,
+    "pluginHookLogPath": "/home/ubuntu/.tokenmonk-hooks.log",
+    "pluginSpoolPresentBeforeManualProbe": false,
+    "pluginHomeDirPresentBeforeManualProbe": false,
+    "cursorInvokedProjectHookRecords": 119,
+    "projectHookEventCounts": {
+      "preToolUse": 41,
+      "postToolUse": 37,
+      "afterFileEdit": 2,
+      "beforeReadFile": 18,
+      "beforeShellExecution": 11,
+      "afterShellExecution": 10,
+      "beforeSubmitPrompt": 0,
+      "afterAgentThought": 0,
+      "sessionStart": 0,
+      "stop": 0,
+      "afterAgentResponse": 0
+    },
+    "projectHookHeartbeatPath": "/workspace/.tm-spike/project-hook-fired.log",
+    "manualProbeWorks": true,
+    "manualProbeNote": "After confirming zero plugin artifacts, the agent ran capture-tool-use.js, flush-spool.js, and capture-prompt-submit.js with session_id=manual-self-test. Those scripts immediately created ~/.tokenmonk-hooks.log and ~/.tokenmonk/{turns,spool}. That is not a Cursor hook invocation. Subsequent Cursor postToolUse/afterShellExecution events (project hooks kept incrementing) did not append any extra plugin-log lines.",
+    "mcpTokenmonkConfig": {
+      "namespacePresent": true,
+      "namespaceStatus": "error",
+      "namespaceError": "This MCP server failed during live tool discovery. Its tools are unavailable until the connection is fixed."
+    },
+    "secretsInAgentEnv": {
+      "CLOUD_AGENT_ALL_SECRET_NAMES": ["CAPTURE_ENDPOINT", "CAPTURE_TOKEN", "REDACT_MODE", "TM_PROBE_VAR"],
+      "note": "Capture endpoint/token env vars were present in the agent process. Plugin hooks never ran, so they could not observe TM_PROBE_VAR or spool capture events."
+    }
+  },
+  "triggersAttempted": [
+    "beforeSubmitPrompt (kickoff user message — should have fired before any tool if plugin hooks loaded; also registered in project hooks.json and produced 0 project records)",
+    "sessionStart (plugin-only; would have created ~/.tokenmonk-hooks.log at session start)",
+    "postToolUse / afterMCPExecution (Read, Write, Shell, MCP GetDynamicTools/CallDynamicTool — project postToolUse fired 37 times with zero plugin records)",
+    "afterFileEdit (Write of .tm-spike-trigger.txt)",
+    "beforeShellExecution / afterShellExecution (multiple Shell tool calls; project hooks fired, plugin log unchanged)",
+    "afterAgentThought (registered in both project and plugin hooks; project probe recorded 0)"
+  ],
+  "confounders": [
+    "Cloud plugin manifest enabledCapabilities is only [\"static\"] for this required team plugin. Hooks may not be an enabled capability on cloud agents even though hooks/hooks.json is present in the installed artifact.",
+    "beforeSubmitPrompt recorded 0 project-hook heartbeats as well. The kickoff prompt may already have been submitted before this VM/session started, so a missing beforeSubmitPrompt is not by itself proof that plugin hooks are unloaded.",
+    "afterAgentThought also recorded 0 project-hook heartbeats, so that event may not fire on this cloud-agent surface.",
+    "Those two caveats do not explain postToolUse: project postToolUse fired dozens of times while tokenmonk-capture's postToolUse command (which always logHooks on start) produced no files until the agent invoked it by hand.",
+    "Tokenmonk-config MCP from the same plugin failed live tool discovery. MCP wiring was attempted; hook wiring was not observed."
+  ],
+  "conclusion": "Team plugin hooks from tokenmonk-capture did not fire in this cloud-agent session. Project hooks in the same session did fire. The plugin scripts work when executed directly. Re-test if/when cloud agents enable plugin hook capabilities rather than only static."
+}
