@@ -1,0 +1,54 @@
+{
+  "run": {
+    "bcId": "bc-64a8fb5c-4b3b-4e11-8206-007956731b24",
+    "url": "https://cursor.com/agents/bc-64a8fb5c-4b3b-4e11-8206-007956731b24",
+    "name": "Engineering documentation updates",
+    "surface": "cloud_agent",
+    "source": "automations",
+    "repo": "https://github.com/meghana-tokenmonk/tokenmonk-test",
+    "gitSha": "65ad7bc39bfe8d35854a19db6ea480e47c38c698",
+    "testedAt": "2026-09-07T16:03:00Z"
+  },
+  "question": "Do project hooks from .cursor/hooks.json fire in this cloud-agent session?",
+  "answer": "yes",
+  "evidence": {
+    "heartbeatLogPresent": true,
+    "heartbeatLogPath": "/workspace/.tm-spike/project-hook-fired.log",
+    "cursorInvokedProjectHookRecords": 107,
+    "projectHookEventCounts": {
+      "preToolUse": 39,
+      "postToolUse": 34,
+      "beforeReadFile": 14,
+      "beforeShellExecution": 8,
+      "afterShellExecution": 7,
+      "afterFileEdit": 5,
+      "beforeSubmitPrompt": 0,
+      "afterAgentThought": 0,
+      "afterAgentResponse": 0,
+      "stop": 0
+    },
+    "countNote": "Snapshot during the documentation turn. Counts keep rising as tools run. Zeroes for beforeSubmitPrompt / afterAgentThought / afterAgentResponse / stop are not evidence those registrations failed.",
+    "manualSmokeTest": {
+      "command": "printf '%s' '{\"hook_event_name\":\"preToolUse\",\"session_id\":\"docs-smoke\"}' | .cursor/hooks/project-probe.sh",
+      "stdout": "{\"continue\":true,\"permission\":\"allow\"}",
+      "exitCode": 0
+    },
+    "throwawayProbeJsPresent": false,
+    "throwawayProbeCachePath": "~/.cursor/plugins/cache/meghud-tokenmonk-throwaway",
+    "teamPluginPresent": true,
+    "teamPluginEnabledCapabilities": ["static"],
+    "teamPluginHookArtifactsPresent": false
+  },
+  "triggersObserved": [
+    "preToolUse / postToolUse (Read, Write, Shell, MCP)",
+    "beforeReadFile (Read of hooks and prior docs)",
+    "beforeShellExecution / afterShellExecution (git, verification commands)",
+    "afterFileEdit (Write of README.md / docs / this file)"
+  ],
+  "confounders": [
+    "This VM booted from a checkout that already had valid .cursor/hooks.json (65ad7bc). That is the opposite of bc-abc4fe2f, which booted from invalid JSON at 51eec9c.",
+    "meghud-tokenmonk-throwaway/probe.js is not installed on this image, so the committed script fail-opens after writing the heartbeat.",
+    "The required team plugin tokenmonk-capture is installed with enabledCapabilities [\"static\"] only. No team-plugin hook artifacts appeared while project heartbeats incremented."
+  ],
+  "conclusion": "Project hooks fire in a cloud-agent session that starts from valid hooks.json. Use .tm-spike/project-hook-fired.log as the signal. A missing throwaway plugin cache or a static-only team plugin does not prevent the heartbeat."
+}
