@@ -1,0 +1,64 @@
+{
+  "run": {
+    "bcId": "bc-74851520-81b4-4c0f-84d2-7e6c305942e4",
+    "url": "https://cursor.com/agents/bc-74851520-81b4-4c0f-84d2-7e6c305942e4",
+    "name": "Engineering documentation updates",
+    "surface": "cloud_agent",
+    "source": "automations",
+    "repo": "https://github.com/meghana-tokenmonk/tokenmonk-test",
+    "gitSha": "65ad7bc39bfe8d35854a19db6ea480e47c38c698",
+    "testedAt": "2026-09-21T16:06:03Z"
+  },
+  "question": "Do project hooks from .cursor/hooks.json fire in this cloud-agent session?",
+  "answer": "yes",
+  "evidence": {
+    "heartbeatLogPresent": true,
+    "heartbeatLogPath": "/workspace/.tm-spike/project-hook-fired.log",
+    "cursorInvokedProjectHookRecords": 92,
+    "manualOrEmptyCursorProjectDirRecords": 1,
+    "projectHookEventCounts": {
+      "preToolUse": 33,
+      "postToolUse": 27,
+      "beforeReadFile": 8,
+      "beforeShellExecution": 11,
+      "afterShellExecution": 10,
+      "afterFileEdit": 4,
+      "beforeSubmitPrompt": 0,
+      "afterAgentThought": 0,
+      "afterAgentResponse": 0,
+      "stop": 0
+    },
+    "countNote": "Snapshot during the documentation turn. Counts keep rising as tools run. Zeroes for beforeSubmitPrompt / afterAgentThought / afterAgentResponse / stop are not evidence those registrations failed. The empty cursor_project_dir line(s) are the local smoke test.",
+    "manualSmokeTest": {
+      "command": "printf '%s' '{\"hook_event_name\":\"preToolUse\",\"session_id\":\"docs-smoke\"}' | .cursor/hooks/project-probe.sh",
+      "stdout": "{\"continue\":true,\"permission\":\"allow\"}",
+      "exitCode": 0
+    },
+    "throwawayProbeJsPresent": false,
+    "throwawayProbeCachePath": "~/.cursor/plugins/cache/meghud-tokenmonk-throwaway",
+    "installedPlugins": [
+      {
+        "name": "gmail",
+        "marketplaceSlug": "cursor-public",
+        "enabledCapabilities": [
+          "static"
+        ],
+        "isRequired": false
+      }
+    ],
+    "teamPluginPresent": false,
+    "teamPluginHookArtifactsPresent": false
+  },
+  "triggersObserved": [
+    "preToolUse / postToolUse (Read, Write, Shell, MCP)",
+    "beforeReadFile (Read of hooks and prior docs)",
+    "beforeShellExecution / afterShellExecution (git, verification commands)",
+    "afterFileEdit (Write of README.md / docs / this file)"
+  ],
+  "confounders": [
+    "This VM booted from a checkout that already had valid .cursor/hooks.json (65ad7bc). That is the opposite of bc-abc4fe2f, which booted from invalid JSON at 51eec9c.",
+    "meghud-tokenmonk-throwaway/probe.js is not installed on this image, so the committed script fail-opens after writing the heartbeat.",
+    "This image's plugin cache contains only the public gmail plugin (enabledCapabilities [\"static\"]). The TokenMonk team plugin is absent. Project heartbeats still incremented."
+  ],
+  "conclusion": "Project hooks fire in a cloud-agent session that starts from valid hooks.json. Use .tm-spike/project-hook-fired.log as the signal; Cursor-invoked lines set cursor_project_dir. A missing throwaway plugin cache and a missing TokenMonk team plugin do not prevent the heartbeat."
+}
